@@ -8,5 +8,6 @@ jobs:
       image: archlinux
     steps:
     - name: Build Kernel
+      uses: actions/checkout@v2
       run: |
         ./make.sh
