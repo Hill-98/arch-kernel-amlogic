@@ -1,0 +1,26 @@
+From b3400009ff6e7ac0a14684805b74fcfe464a04c3 Mon Sep 17 00:00:00 2001
+From: Zhong Lufan <lufanzhong@gmail.com>
+Date: Wed, 13 May 2020 11:35:35 +0800
+Subject: [PATCH] aarch64: dts: meson: amlogic: fix phicomm n1 persistent high
+ load
+
+---
+ arch/arm64/boot/dts/amlogic/meson-gxl-s905d-phicomm-n1.dts | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/amlogic/meson-gxl-s905d-phicomm-n1.dts b/arch/arm64/boot/dts/amlogic/meson-gxl-s905d-phicomm-n1.dts
+index b5667f1..bbcf665 100644
+--- a/arch/arm64/boot/dts/amlogic/meson-gxl-s905d-phicomm-n1.dts
++++ b/arch/arm64/boot/dts/amlogic/meson-gxl-s905d-phicomm-n1.dts
+@@ -29,3 +29,8 @@ status {
+ &cvbs_vdac_port {
+ 	status = "disabled";
+ };
++
++&external_phy {
++        /delete-property/ reset-gpios;
++        interrupts = <25 IRQ_TYPE_LEVEL_LOW>;
++};
+-- 
+2.26.2
+
