@@ -7,8 +7,8 @@ jobs:
     container:
       image: archlinux
     steps:
+    - uses: actions/checkout@v2
     - name: Build Kernel
-      uses: actions/checkout@v2
       run: |
         ./make.sh
     - uses: actions/upload-artifact@v1
