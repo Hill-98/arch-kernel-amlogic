@@ -4,12 +4,12 @@ pacman -S --noconfirm --needed base-devel aarch64-linux-gnu-gcc
 
 echo "nobody ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
-repodir=$(dirname "$0")
+builddir="$RUNNER_TEMP/linux-amlogic"
+cp -r "$GITHUB_WORKSPACE/linux-amlogic" "$builddir"
+chown nobody:root "$builddir"
+cd "$builddir" || exit 1
 
-cp -r "$repodir/linux-amlogic" "/github/workflow/linux-amlogic"
+sudo -u nobody /usr/bin/env ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- makepkg --syncdeps --noconfirm --config "$GITHUB_WORKSPACE/makepkg.conf"
 
-chown nobody:root /github/workflow/linux-amlogic
-
-cd /github/workflow/linux-amlogic || exit 1
-
-sudo -u nobody /usr/bin/env ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- makepkg --syncdeps --noconfirm --config "$repodir/makepkg.conf"
+mkdir -p "$GITHUB_WORKSPACE/dist"
+cp ./*.pkg.tar.zst "$GITHUB_WORKSPACE/dist"

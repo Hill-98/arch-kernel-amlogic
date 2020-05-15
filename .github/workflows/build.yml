@@ -11,7 +11,21 @@ jobs:
     - name: Build Kernel
       run: |
         ./make.sh
+    - name: Create Release
+      uses: actions/create-release@v1
+      if: ${{ startsWith(github.ref, 'v') }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: linux-amlogic-${{ github.ref }}
+        body: |
+          Changes in this Release
+          - First Change
+          - Second Change
+        draft: false
+        prerelease: false
     - uses: actions/upload-artifact@v1
       with:
         name: linux-amlogic
-        path: /github/workflow/linux-amlogic/*.pkg.tar.zst
+        path: ${{ github.workspace }}/dist
