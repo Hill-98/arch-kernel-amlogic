@@ -1,0 +1,17 @@
+name: Build Kernel CI
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build Kernel
+      run: |
+        ./make.sh
+    - uses: actions/upload-artifact@v1
+      with:
+        name: linux-amlogic
+        path: ${{ github.workspace }}/dist
