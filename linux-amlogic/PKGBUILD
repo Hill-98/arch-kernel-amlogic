@@ -39,8 +39,6 @@ md5sums=('7b9199ec5fa563ece9ed585ffb17798f'
 prepare() {
   cd ${_srcname}
 
-  git init
-
   # add upstream patch
   git apply --whitespace=nowarn ../patch-${pkgver}
 
@@ -50,6 +48,8 @@ prepare() {
   git apply ../1001-fix-phicomm-n1-persistent-high-load.patch
 
   cat "${srcdir}/config" > ./.config
+
+  head -n 50 .config
 
   # add pkgrel to extraversion
   sed -ri "s|^(EXTRAVERSION =)(.*)|\1 \2-${pkgrel}|" Makefile
