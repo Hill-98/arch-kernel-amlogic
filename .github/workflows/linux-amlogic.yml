@@ -9,9 +9,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build Kernel
-      run: |
-        ./make.sh
+      run: ./make.sh
     - uses: actions/upload-artifact@v1
       with:
         name: linux-amlogic
-        path: ${{ github.workspace }}/dist
+        path: ${{ runner.temp }}/*.pkg.tar.zst
