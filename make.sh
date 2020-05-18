@@ -11,4 +11,6 @@ echo "nobody ALL=(ALL) NOPASSWD: ALL" | tee -a /etc/sudoers
 
 sudo -u nobody /usr/bin/env ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- makepkg --syncdeps --noconfirm --config "$GITHUB_WORKSPACE/makepkg.conf"
 
-cp ./*.pkg.tar.zst "$RUNNER_TEMP"
+mkdir "$RUNNER_TEMP/pkg"
+mv ./*.pkg.tar.zst "$RUNNER_TEMP/pkg"
+ls -l "$RUNNER_TEMP/pkg"

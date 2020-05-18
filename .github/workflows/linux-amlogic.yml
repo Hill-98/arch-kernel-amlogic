@@ -12,4 +12,4 @@ jobs:
     - uses: actions/upload-artifact@v1
       with:
         name: linux-amlogic
-        path: ${{ runner.temp }}/linux-amlogic/*.pkg.tar.zst
+        path: ${{ runner.temp }}/pkg
