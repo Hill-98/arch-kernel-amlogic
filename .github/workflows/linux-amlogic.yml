@@ -1,4 +1,4 @@
-name: Build Kernel CI
+name: Build linux-amlogic
 on: [push, pull_request]
 
 jobs:
@@ -8,9 +8,8 @@ jobs:
       image: archlinux
     steps:
     - uses: actions/checkout@v2
-    - name: Build Kernel
       run: ./make.sh
     - uses: actions/upload-artifact@v1
       with:
         name: linux-amlogic
-        path: ${{ runner.temp }}/*.pkg.tar.zst
+        path: ${{ runner.temp }}/linux-amlogic/*.pkg.tar.zst
