@@ -1,6 +1,6 @@
 #!/bin/bash
-pacman -Syu --noconfirm
-pacman -S --noconfirm --needed base-devel aarch64-linux-gnu-gcc
+yes | pacman -Syu --noconfirm
+yes | pacman -S --noconfirm --needed base-devel aarch64-linux-gnu-gcc
 
 builddir="$RUNNER_TEMP/linux-amlogic"
 cp -r "$GITHUB_WORKSPACE/linux-amlogic" "$builddir"
