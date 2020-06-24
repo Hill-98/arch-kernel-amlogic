@@ -36,9 +36,6 @@ md5sums=('f63ed18935914e1ee3e04c2a0ce1ba3b'
          '3dc88030a8f2f5a5f97266d99b149f77'
          'a3b55234cf4b7f86b01b903677e2c938')
 
-export KBUILD_BUILD_HOST=github
-export KBUILD_BUILD_USER=Hill-98
-
 prepare() {
   cd ${_srcname}
 
