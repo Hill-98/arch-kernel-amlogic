@@ -3,9 +3,6 @@ on: [push, pull_request]
 
 jobs:
   build:
-    env:
-      KBUILD_BUILD_HOST: github
-      KBUILD_BUILD_USER: ${{ github.repository_owner }}
     runs-on: ubuntu-latest
     container:
       image: archlinux
