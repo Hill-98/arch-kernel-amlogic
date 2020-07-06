@@ -3,13 +3,33 @@ on: [push, pull_request]
 
 jobs:
   build:
+    env:
+      BUILD_DIR: ${{ runner.temp }}/linux-amlogic
     runs-on: ubuntu-latest
     container:
       image: archlinux
     steps:
     - uses: actions/checkout@v2
-    - run: ./make.sh
-    - uses: actions/upload-artifact@v1
+    - name: Update packages
+      run: yes | pacman -Syu --noconfirm
+    - name: Install need packages
+      run: yes | pacman -S --noconfirm --needed base-devel aarch64-linux-gnu-gcc
+    - name: Allow nobody to execute sudo without a password
+      run: 'echo "nobody ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers'
+    - name: Copy Files
+      run: |
+        cp -r "${{ github.workspace }}/linux-amlogic" "${{ env.BUILD_DIR }}"
+        chown nobody:root "${{ env.BUILD_DIR }}"
+    - name: Make
+      run: |
+        cd "${{ env.BUILD_DIR }}"
+        sudo -u nobody env \
+        ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- KBUILD_BUILD_HOST=github KBUILD_BUILD_USER=$GITHUB_REPOSITORY_OWNER \
+        makepkg --syncdeps --noconfirm --config "$GITHUB_WORKSPACE/makepkg.conf"
+    - name: List Files
+      run: ls -l "${{ env.BUILD_DIR }}/*.pkg.tar.zst"
+    - name: Upload
+      uses: actions/upload-artifact@v1
       with:
         name: linux-amlogic
-        path: ${{ runner.temp }}/pkg
+        path: ${{ env.BUILD_DIR }}/*.pkg.tar.zst
