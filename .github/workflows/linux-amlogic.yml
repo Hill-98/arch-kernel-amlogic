@@ -2,9 +2,9 @@ name: Build linux-amlogic
 on: [push, pull_request]
 
 jobs:
-  build:
+  linux-amlogic:
     env:
-      BUILD_DIR: /tmp/linux-amlogic
+      BUILD_DIR: /tmp/${{ github.job }}
     runs-on: ubuntu-latest
     container:
       image: archlinux
@@ -18,18 +18,18 @@ jobs:
       run: 'echo "nobody ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers'
     - name: Copy Files
       run: |
-        cp -r "$GITHUB_WORKSPACE/linux-amlogic" "${{ env.BUILD_DIR }}"
+        cp -r "$GITHUB_WORKSPACE/${{ github.job }}" "${{ env.BUILD_DIR }}"
         chown nobody:root "${{ env.BUILD_DIR }}"
     - name: Make
       run: |
         cd "${{ env.BUILD_DIR }}"
         sudo -u nobody env \
-        ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- KBUILD_BUILD_HOST=github KBUILD_BUILD_USER=$GITHUB_REPOSITORY_OWNER \
+        ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- KBUILD_BUILD_HOST=github KBUILD_BUILD_USER=${{ github.repository_owner }} \
         makepkg --syncdeps --noconfirm --config "$GITHUB_WORKSPACE/makepkg.conf"
     - name: List Files
-      run: ls -l "${{ env.BUILD_DIR }}/*.pkg.tar.zst"
+      run: ls -l ${{ env.BUILD_DIR }}
     - name: Upload
       uses: actions/upload-artifact@v1
       with:
-        name: linux-amlogic
+        name: ${{ github.job }}
         path: ${{ env.BUILD_DIR }}/*.pkg.tar.zst
