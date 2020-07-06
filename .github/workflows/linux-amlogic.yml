@@ -4,7 +4,7 @@ on: [push, pull_request]
 jobs:
   build:
     env:
-      BUILD_DIR: ${{ runner.temp }}/linux-amlogic
+      BUILD_DIR: /tmp/linux-amlogic
     runs-on: ubuntu-latest
     container:
       image: archlinux
