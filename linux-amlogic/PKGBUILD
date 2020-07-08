@@ -8,8 +8,8 @@ pkgbase=linux-amlogic
 _srcname=linux-5.7
 _kernelname=${pkgbase#linux}
 _desc="Amlogic"
-pkgver=5.7.2
-pkgrel=2
+pkgver=5.7.7
+pkgrel=1
 arch=('aarch64')
 url="http://www.kernel.org/"
 license=('GPL2')
@@ -26,7 +26,7 @@ source=("http://www.kernel.org/pub/linux/kernel/v5.x/${_srcname}.tar.xz"
         '90-linux.hook'
         '91-linux.hook')
 md5sums=('f63ed18935914e1ee3e04c2a0ce1ba3b'
-         '7dbd8df264550584e43dfc512c2b9acd'
+         '6103451d140cfb4862b45cde2217543c'
          '8f50ae936659ff174e292e1164d279c1'
          'd8ec9016454cebc403629238acbb4b22'
          'd196e2959886e056c95f3e8783757c9a'
