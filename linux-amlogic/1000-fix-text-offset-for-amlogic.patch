@@ -1,39 +1,25 @@
-From 9e74468d29b026a47c3ed023ac36c029f2eb21ca Mon Sep 17 00:00:00 2001
+From fc20ed0730573768130f6ebd4253ac7674f69d59 Mon Sep 17 00:00:00 2001
 From: Zhong Lufan <lufanzhong@gmail.com>
-Date: Wed, 13 May 2020 22:57:33 +0800
+Date: Sun, 6 Sep 2020 20:57:45 +0800
 Subject: [PATCH] arm64: fix text offset for amlogic
 
 ---
- arch/arm64/Makefile      | 2 +-
- arch/arm64/kernel/head.S | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ arch/arm64/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/arch/arm64/Makefile b/arch/arm64/Makefile
-index 4e6ce2d..696a964 100644
+index 70f590595..b669c93ce 100644
 --- a/arch/arm64/Makefile
 +++ b/arch/arm64/Makefile
-@@ -106,7 +106,7 @@ TEXT_OFFSET := $(shell awk "BEGIN {srand(); printf \"0x%06x\n\", \
- 		 int(2 * 1024 * 1024 / (2 ^ $(CONFIG_ARM64_PAGE_SHIFT)) * \
- 		 rand()) * (2 ^ $(CONFIG_ARM64_PAGE_SHIFT))}")
- else
--TEXT_OFFSET := 0x00080000
+@@ -121,7 +121,7 @@ endif
+ head-y		:= arch/arm64/kernel/head.o
+ 
+ # The byte offset of the kernel image in RAM from the start of RAM.
+-TEXT_OFFSET := 0x0
 +TEXT_OFFSET := 0x01080000
- endif
  
  ifeq ($(CONFIG_KASAN_SW_TAGS), y)
-diff --git a/arch/arm64/kernel/head.S b/arch/arm64/kernel/head.S
-index 989b194..7b6e347 100644
---- a/arch/arm64/kernel/head.S
-+++ b/arch/arm64/kernel/head.S
-@@ -40,7 +40,7 @@
- #error TEXT_OFFSET must be at least 4KB aligned
- #elif (PAGE_OFFSET & 0x1fffff) != 0
- #error PAGE_OFFSET must be at least 2MB aligned
--#elif TEXT_OFFSET > 0x1fffff
-+//#elif TEXT_OFFSET > 0x1fffff
- #error TEXT_OFFSET must be less than 2MB
- #endif
- 
+ KASAN_SHADOW_SCALE_SHIFT := 4
 -- 
-2.26.2
+2.28.0
 
