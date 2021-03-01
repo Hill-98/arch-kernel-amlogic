@@ -7,13 +7,13 @@ jobs:
       BUILD_DIR: /tmp/${{ github.job }}
     runs-on: ubuntu-latest
     container:
-      image: archlinux
+      image: archlinux:base-devel
     steps:
     - uses: actions/checkout@v2
     - name: Update packages
       run: yes | pacman -Syu --noconfirm
     - name: Install need packages
-      run: yes | pacman -S --noconfirm --needed base-devel aarch64-linux-gnu-gcc
+      run: yes | pacman -S --noconfirm --needed aarch64-linux-gnu-gcc
     - name: Allow nobody to execute sudo without a password
       run: 'echo "nobody ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers'
     - name: Copy Files
