@@ -27,7 +27,7 @@ source=("http://www.kernel.org/pub/linux/kernel/v5.x/${_srcname}.tar.xz"
         '91-linux.hook')
 md5sums=('753adc474bf799d569dec4f165ed92c3'
          '68ad57545f86a06590332537362dd7f3'
-         '9ddceda436caa64573c4b89d9cbe1d32'
+         '04bc4fd8adadb9322b167af65daeadaf'
          '7a18066683f3351b2bbd2653db783f80'
          'a045c2c307d9fb7c2f14654db235b2ef'
          'e9b008bc8304a15ca721337ec94a5165'
@@ -43,9 +43,9 @@ prepare() {
   git apply --whitespace=nowarn ../patch-${pkgver}
 
   # patches
-  git apply ../0001-revert-arm64-get-rid-of-TEXT_OFFSET.patch
-  git apply ../0002-make-proc-cpuinfo-consistent-on-arm64-and-arm.patch
-  git apply ../0003-fix-phicomm-n1-persistent-high-load.patch
+  git apply "${srcdir}/0001-revert-arm64-get-rid-of-TEXT_OFFSET.patch"
+  git apply "${srcdir}/0002-make-proc-cpuinfo-consistent-on-arm64-and-arm.patch"
+  git apply "${srcdir}/0003-fix-phicomm-n1-persistent-high-load.patch"
 
   cat "${srcdir}/config" > ./.config
 
