@@ -1,4 +1,4 @@
-From 074ffba973364f67744dabb4688df7612a422720 Mon Sep 17 00:00:00 2001
+From 0ba4501bd0d20f50225e0da6b8f83dd17f0ff7ee Mon Sep 17 00:00:00 2001
 From: Zhong Lufan <lufanzhong@gmail.com>
 Date: Fri, 27 Aug 2021 18:30:47 +0800
 Subject: [PATCH] revert "arm64: get rid of TEXT_OFFSET"
@@ -203,7 +203,7 @@ index a2ae9c3b9..99efc9212 100644
  # Even when -mbranch-protection=none is set, Clang will generate a
  # .note.gnu.property for code-less object files (like lib/ctype.c),
 diff --git a/drivers/firmware/efi/libstub/arm64-stub.c b/drivers/firmware/efi/libstub/arm64-stub.c
-index c1b57dfb1..14b279c61 100644
+index c1b57dfb1..6fae18f88 100644
 --- a/drivers/firmware/efi/libstub/arm64-stub.c
 +++ b/drivers/firmware/efi/libstub/arm64-stub.c
 @@ -125,7 +125,7 @@ efi_status_t handle_kernel_image(unsigned long *image_addr,
@@ -220,7 +220,7 @@ index c1b57dfb1..14b279c61 100644
  		if (!check_image_region((u64)_text, kernel_memsize)) {
  			efi_err("FIRMWARE BUG: Image BSS overlaps adjacent EFI memory region\n");
 -		} else if (IS_ALIGNED((u64)_text, min_kimg_align)) {
-+		} else if (IS_ALIGNED((u64)_text - TEXT_OFFSET, min_kimg_align)) {) {
++		} else if (IS_ALIGNED((u64)_text - TEXT_OFFSET, min_kimg_align)) {
  			/*
  			 * Just execute from wherever we were loaded by the
  			 * UEFI PE/COFF loader if the alignment is suitable.
