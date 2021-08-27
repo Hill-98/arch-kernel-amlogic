@@ -11,7 +11,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Fix glibc
-      run: curl -fsSL "https://repo.archlinuxcn.org/x86_64/glibc-linux4-2.33-4-x86_64.pkg.tar.zst" | bsdtar -C / -xvf -
+      run: curl -fsSL "https://repo.archlinuxcn.org/x86_64/glibc-linux4-2.33-5-x86_64.pkg.tar.zst" | bsdtar -C / -xvf -
     - name: Update packages
       run: yes | pacman -Syu --noconfirm
     - name: Install need packages
@@ -34,4 +34,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: ${{ github.job }}
-        path: ${{ env.BUILD_DIR }}/*.pkg.tar.zst
+        path: ${{ env.BUILD_DIR }}/*.pkg.tar.*
