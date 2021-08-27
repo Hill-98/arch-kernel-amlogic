@@ -5,10 +5,10 @@
 buildarch=8
 
 pkgbase=linux-amlogic
-_srcname=linux-5.11
+_srcname=linux-5.10
 _kernelname=${pkgbase#linux}
 _desc="Amlogic"
-pkgver=5.11.1
+pkgver=5.10.61
 pkgrel=1
 arch=('aarch64')
 url="http://www.kernel.org/"
@@ -17,16 +17,18 @@ makedepends=('xmlto' 'docbook-xsl' 'kmod' 'inetutils' 'bc' 'git' 'uboot-tools' '
 options=('!strip')
 source=("http://www.kernel.org/pub/linux/kernel/v5.x/${_srcname}.tar.xz"
         "http://www.kernel.org/pub/linux/kernel/v5.x/patch-${pkgver}.xz"
-        '0001-net-smsc95xx-Allow-mac-address-to-be-set-as-a-parame.patch'
-        '1001-fix-phicomm-n1-persistent-high-load.patch'
+        '0001-revert-arm64-get-rid-of-TEXT_OFFSET.patch'
+        '0002-make-proc-cpuinfo-consistent-on-arm64-and-arm.patch'
+        '0003-fix-phicomm-n1-persistent-high-load.patch'
         'config'
         'linux.preset'
         '60-linux.hook'
         '90-linux.hook'
         '91-linux.hook')
-md5sums=('d2985a3f16ef1ea3405c04c406e29dcc'
-         '0e4274c495b4c0cbf41dd3842c87de31'
-         'f9b6f367eef351eaa89b23a9b1ffc5a2'
+md5sums=('753adc474bf799d569dec4f165ed92c3'
+         '68ad57545f86a06590332537362dd7f3'
+         '9ddceda436caa64573c4b89d9cbe1d32'
+         '7a18066683f3351b2bbd2653db783f80'
          'a045c2c307d9fb7c2f14654db235b2ef'
          '243aeaf92203c61d281dbb3a8f348857'
          '86d4a35722b5410e3b29fc92dae15d4b'
@@ -40,9 +42,10 @@ prepare() {
   # add upstream patch
   git apply --whitespace=nowarn ../patch-${pkgver}
 
-  # ALARM patches
-  git apply ../0001-net-smsc95xx-Allow-mac-address-to-be-set-as-a-parame.patch
-  git apply ../1001-fix-phicomm-n1-persistent-high-load.patch
+  # patches
+  git apply ../0001-revert-arm64-get-rid-of-TEXT_OFFSET.patch
+  git apply ../0002-make-proc-cpuinfo-consistent-on-arm64-and-arm.patch
+  git apply ../0003-fix-phicomm-n1-persistent-high-load.patch
 
   cat "${srcdir}/config" > ./.config
 
