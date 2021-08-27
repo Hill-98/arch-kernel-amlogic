@@ -1,4 +1,4 @@
-From 24d79b849ec9e7959404a5ffbcda3b09a868d39a Mon Sep 17 00:00:00 2001
+From a10b190d4515aec14f3f44ea02add2e49ef68c1d Mon Sep 17 00:00:00 2001
 From: Zhong Lufan <lufanzhong@gmail.com>
 Date: Fri, 27 Aug 2021 18:30:47 +0800
 Subject: [PATCH] revert "arm64: get rid of TEXT_OFFSET"
@@ -101,7 +101,7 @@ index bbaf0bc4a..8edfec481 100644
  
  CFLAGS_REMOVE_ftrace.o = $(CC_FLAGS_FTRACE)
 diff --git a/arch/arm64/kernel/head.S b/arch/arm64/kernel/head.S
-index 78cdd6b24..914b82548 100644
+index 78cdd6b24..d4cef0926 100644
 --- a/arch/arm64/kernel/head.S
 +++ b/arch/arm64/kernel/head.S
 @@ -36,10 +36,14 @@
@@ -153,7 +153,7 @@ index 78cdd6b24..914b82548 100644
  	.pushsection ".rodata", "a"
  SYM_DATA_START(kimage_vaddr)
 -	.quad		_text
-+	quad		_text - TEXT_OFFSET
++	.quad		_text - TEXT_OFFSET
  SYM_DATA_END(kimage_vaddr)
  EXPORT_SYMBOL(kimage_vaddr)
  	.popsection
