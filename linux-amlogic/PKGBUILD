@@ -24,8 +24,7 @@ source=("http://www.kernel.org/pub/linux/kernel/v5.x/${_srcname}.tar.xz"
         '90-linux.hook'
         '91-linux.hook'
         'config'
-        'linux.preset'
-        'meson-gxl-s905d-phicomm-n1.dts')
+        'linux.preset')
 md5sums=('753adc474bf799d569dec4f165ed92c3'
          '68ad57545f86a06590332537362dd7f3'
          'aa36c8412729caaa9ccb749411f8b544'
@@ -48,9 +47,7 @@ prepare() {
   git apply "${srcdir}/0001-revert-arm64-get-rid-of-TEXT_OFFSET.patch"
   git apply "${srcdir}/0002-make-proc-cpuinfo-consistent-on-arm64-and-arm.patch"
   git apply "${srcdir}/0003-fix-phicomm-n1-persistent-high-load.patch"
-
-  cat "${srcdir}/meson-gxl-s905d-phicomm-n1.dts" > arch/arm64/boot/dts/amlogic/arch/arm64/boot/dts/amlogic/
-
+  
   cat "${srcdir}/config" > ./.config
 
   # add pkgrel to extraversion
