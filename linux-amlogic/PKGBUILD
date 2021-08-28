@@ -9,7 +9,7 @@ _srcname=linux-5.10
 _kernelname=${pkgbase#linux}
 _desc="Amlogic"
 pkgver=5.10.61
-pkgrel=2
+pkgrel=3
 arch=('aarch64')
 url="http://www.kernel.org/"
 license=('GPL2')
@@ -51,7 +51,7 @@ prepare() {
   
   cat "${srcdir}/config" > ./.config
 
-  cp "${srcdir}/meson-gxl-s905d-phicomm-n1.dts" arch/arm64/boot/dts/amlogic/meson-gxl-s905d-phicomm-n1.dts
+  cp -f -v "${srcdir}/meson-gxl-s905d-phicomm-n1.dts" arch/arm64/boot/dts/amlogic/meson-gxl-s905d-phicomm-n1.dts
 
   # add pkgrel to extraversion
   sed -ri "s|^(EXTRAVERSION =)(.*)|\1 \2-${pkgrel}|" Makefile
