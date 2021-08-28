@@ -24,7 +24,8 @@ source=("http://www.kernel.org/pub/linux/kernel/v5.x/${_srcname}.tar.xz"
         '90-linux.hook'
         '91-linux.hook'
         'config'
-        'linux.preset')
+        'linux.preset'
+        'meson-gxl-s905d-phicomm-n1.dts')
 md5sums=('753adc474bf799d569dec4f165ed92c3'
          '68ad57545f86a06590332537362dd7f3'
          'aa36c8412729caaa9ccb749411f8b544'
@@ -34,7 +35,8 @@ md5sums=('753adc474bf799d569dec4f165ed92c3'
          '3dc88030a8f2f5a5f97266d99b149f77'
          'a3b55234cf4b7f86b01b903677e2c938'
          'ef958a74fa8c64b791f5b60be375ac14'
-         '86d4a35722b5410e3b29fc92dae15d4b')
+         '86d4a35722b5410e3b29fc92dae15d4b'
+         '32254701dbf13f058008217a62d713bb')
 
 prepare() {
   cd ${_srcname}
@@ -48,6 +50,8 @@ prepare() {
   git apply "${srcdir}/0003-fix-phicomm-n1-persistent-high-load.patch"
   
   cat "${srcdir}/config" > ./.config
+
+  cp "${srcdir}/meson-gxl-s905d-phicomm-n1.dts" arch/arm64/boot/dts/amlogic/meson-gxl-s905d-phicomm-n1.dts
 
   # add pkgrel to extraversion
   sed -ri "s|^(EXTRAVERSION =)(.*)|\1 \2-${pkgrel}|" Makefile
