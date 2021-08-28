@@ -34,7 +34,7 @@ md5sums=('753adc474bf799d569dec4f165ed92c3'
          'ce6c81ad1ad1f8b333fd6077d47abdaf'
          '3dc88030a8f2f5a5f97266d99b149f77'
          'a3b55234cf4b7f86b01b903677e2c938'
-         'de7aa40a90055140708ee9ced2d5baa3'
+         'ef958a74fa8c64b791f5b60be375ac14'
          '86d4a35722b5410e3b29fc92dae15d4b'
          '32254701dbf13f058008217a62d713bb')
 
@@ -45,9 +45,9 @@ prepare() {
   git apply --whitespace=nowarn ../patch-${pkgver}
 
   # patches
-  git apply "${srcdir}/0001-revert-arm64-get-rid-of-TEXT_OFFSET.patch
-  git apply "${srcdir}/0002-make-proc-cpuinfo-consistent-on-arm64-and-arm.patch
-  git apply "${srcdir}/0003-fix-phicomm-n1-persistent-high-load.patch
+  git apply "${srcdir}/0001-revert-arm64-get-rid-of-TEXT_OFFSET.patch"
+  git apply "${srcdir}/0002-make-proc-cpuinfo-consistent-on-arm64-and-arm.patch"
+  git apply "${srcdir}/0003-fix-phicomm-n1-persistent-high-load.patch"
 
   cat "${srcdir}/meson-gxl-s905d-phicomm-n1.dts" > arch/arm64/boot/dts/amlogic/arch/arm64/boot/dts/amlogic/
 
