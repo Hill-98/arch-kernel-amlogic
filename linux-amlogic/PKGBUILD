@@ -9,7 +9,7 @@ _srcname=linux-5.10
 _kernelname=${pkgbase#linux}
 _desc="Amlogic"
 pkgver=5.10.61
-pkgrel=1
+pkgrel=2
 arch=('aarch64')
 url="http://www.kernel.org/"
 license=('GPL2')
@@ -34,8 +34,7 @@ md5sums=('753adc474bf799d569dec4f165ed92c3'
          '3dc88030a8f2f5a5f97266d99b149f77'
          'a3b55234cf4b7f86b01b903677e2c938'
          'ef958a74fa8c64b791f5b60be375ac14'
-         '86d4a35722b5410e3b29fc92dae15d4b'
-         '32254701dbf13f058008217a62d713bb')
+         '86d4a35722b5410e3b29fc92dae15d4b')
 
 prepare() {
   cd ${_srcname}
