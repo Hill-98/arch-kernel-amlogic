@@ -8,7 +8,7 @@ pkgbase=linux-amlogic
 _srcname=linux-5.10
 _kernelname=${pkgbase#linux}
 _desc="Amlogic"
-pkgver=5.10.61
+pkgver=5.10.62
 pkgrel=3
 arch=('aarch64')
 url="http://www.kernel.org/"
@@ -51,6 +51,7 @@ prepare() {
   
   cat "${srcdir}/config" > ./.config
 
+  # Apply custom Phicomm N1 dts
   cp -f -v "${srcdir}/meson-gxl-s905d-phicomm-n1.dts" arch/arm64/boot/dts/amlogic/meson-gxl-s905d-phicomm-n1.dts
 
   # add pkgrel to extraversion
