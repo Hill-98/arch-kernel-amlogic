@@ -27,7 +27,7 @@ source=("http://www.kernel.org/pub/linux/kernel/v5.x/${_srcname}.tar.xz"
         'linux.preset'
         'meson-gxl-s905d-phicomm-n1.dts')
 md5sums=('753adc474bf799d569dec4f165ed92c3'
-         '68ad57545f86a06590332537362dd7f3'
+         'b96a0bcdeb2ff62a65ace7f2284005b6'
          'aa36c8412729caaa9ccb749411f8b544'
          '7a18066683f3351b2bbd2653db783f80'
          'a045c2c307d9fb7c2f14654db235b2ef'
