@@ -8,12 +8,12 @@ pkgbase=linux-amlogic
 _srcname=linux-5.10
 _kernelname=${pkgbase#linux}
 _desc="Amlogic"
-pkgver=5.10.62
-pkgrel=3
+pkgver=5.10.63
+pkgrel=1
 arch=('aarch64')
 url="http://www.kernel.org/"
 license=('GPL2')
-makedepends=('xmlto' 'docbook-xsl' 'kmod' 'inetutils' 'bc' 'git' 'uboot-tools' 'dtc')
+makedepends=('xmlto' 'docbook-xsl' 'kmod' 'inetutils' 'bc' 'git')
 options=('!strip')
 source=("http://www.kernel.org/pub/linux/kernel/v5.x/${_srcname}.tar.xz"
         "http://www.kernel.org/pub/linux/kernel/v5.x/patch-${pkgver}.xz"
@@ -27,7 +27,7 @@ source=("http://www.kernel.org/pub/linux/kernel/v5.x/${_srcname}.tar.xz"
         'linux.preset'
         'meson-gxl-s905d-phicomm-n1.dts')
 md5sums=('753adc474bf799d569dec4f165ed92c3'
-         'b96a0bcdeb2ff62a65ace7f2284005b6'
+         'f8d1908113ccee6e355aad2acabeb597'
          'aa36c8412729caaa9ccb749411f8b544'
          '7a18066683f3351b2bbd2653db783f80'
          'a045c2c307d9fb7c2f14654db235b2ef'
@@ -96,7 +96,7 @@ build() {
 
 _package() {
   pkgdesc="The Linux Kernel and modules - ${_desc}"
-  depends=('coreutils' 'linux-firmware' 'kmod' 'mkinitcpio>=0.7' 'firmware-raspberrypi' 'uboot-tools')
+  depends=('coreutils' 'linux-firmware' 'kmod' 'mkinitcpio>=0.7' 'uboot-tools')
   optdepends=('crda: to set the correct wireless channels of your country')
   provides=("linux=${pkgver}" "WIREGUARD-MODULE")
   conflicts=('linux')
