@@ -1,5 +1,5 @@
 *.pkg.tar.zst
-linux*.xz
-patch*.xz
+*.src.tar.gz
+linux-*.xz
 pkg/
 src/
