@@ -1,5 +1,10 @@
 name: Build linux-amlogic
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
+    paths:
+      - 'linux-amlogic/**'
+
 
 jobs:
   linux-amlogic:
@@ -11,7 +16,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Fix glibc
-      run: curl -fsSL "https://repo.archlinuxcn.org/x86_64/glibc-linux4-2.33-5-x86_64.pkg.tar.zst" | bsdtar -C / -xvf -
+      run: curl -fsSL https://repo.archlinuxcn.org/x86_64/glibc-linux4-2.33-5-x86_64.pkg.tar.zst | bsdtar -C / -xvf -
     - name: Update packages
       run: yes | pacman -Syu --noconfirm
     - name: Install need packages
