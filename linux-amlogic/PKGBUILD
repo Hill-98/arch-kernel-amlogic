@@ -5,7 +5,7 @@
 
 pkgbase=linux-amlogic
 pkgver=5.10.63
-pkgrel=2
+pkgrel=3
 url="http://www.kernel.org/"
 arch=('aarch64')
 license=('GPL2')
@@ -120,9 +120,6 @@ _package-headers() {
   install -Dt "$builddir/kernel" -m644 kernel/Makefile
   install -Dt "$builddir/arch/arm64" -m644 arch/arm64/Makefile
   cp -t "$builddir" -a scripts
-
-  # add objtool for external module building and enabled VALIDATION_STACK option
-  install -Dt "$builddir/tools/objtool" tools/objtool/objtool
 
   # add xfs and shmem for aufs building
   mkdir -p "$builddir"/{fs/xfs,mm}
