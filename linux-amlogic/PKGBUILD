@@ -75,13 +75,16 @@ _package() {
   provides=(WIREGUARD-MODULE)
   install=${pkgname}.install
 
-  # sed expression
-  local _subst="s|%PKGBASE%|${pkgbase}|g"
-
   cd $_srcname
   local kernver modulesdir
   kernver="$(<version)"
   modulesdir="$pkgdir/usr/lib/modules/$kernver"
+
+  # sed expression
+  local _subst="
+    s|%PKGBASE%|${pkgbase}|g
+    s|%KERNVER%|${kernver}|g
+  "
 
   echo "Installing boot image..."
   # systemd expects to find the kernel here to allow hibernation
