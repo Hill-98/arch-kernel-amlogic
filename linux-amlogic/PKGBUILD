@@ -6,7 +6,7 @@
 pkgbase=linux-amlogic
 pkgver=5.10.63
 pkgrel=4
-url="http://www.kernel.org/"
+url="https://www.kernel.org/"
 arch=('aarch64')
 license=('GPL2')
 makedepends=(bc kmod libelf pahole cpio perl tar xz)
