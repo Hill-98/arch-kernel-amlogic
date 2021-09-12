@@ -1,3 +1,4 @@
 post_remove() {
+  rm boot/initramfs-linux-amlogic.img
   rm boot/initramfs-linux-amlogic.uimg
 }

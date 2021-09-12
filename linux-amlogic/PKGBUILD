@@ -5,7 +5,7 @@
 
 pkgbase=linux-amlogic
 pkgver=5.10.63
-pkgrel=4
+pkgrel=5
 url="https://www.kernel.org/"
 arch=('aarch64')
 license=('GPL2')
@@ -18,9 +18,10 @@ source=(
     0002-make-proc-cpuinfo-consistent-on-arm64-and-arm.patch
     0003-gcc-plugins-modern-gcc-plugin-infrastructure-requres.patch
     0004-ZEN-Add-sysctl-and-CONFIG-to-disallow-unprivileged-C.patch
-    91-linux-amlogic.hook
+    90-linux.hook
+    91-linux.hook
     config
-    linux-amlogic.preset
+    linux.preset
     meson-gxl-s905d-phicomm-n1.dts
 )
 sha256sums=('19a15e838885a0081de5f9874e608fc3f3b1d9e69f2cc5cfa883b8b5499bcb2e'
@@ -28,7 +29,8 @@ sha256sums=('19a15e838885a0081de5f9874e608fc3f3b1d9e69f2cc5cfa883b8b5499bcb2e'
             '831ac3a6ea8568c58e491c6f57e3b3c8074e8b9ec530b65dc755cda69d8e3079'
             'bb935ad2467637966185b88d18a3f9be2f37d3acdc71ed361eae326ca898d6fc'
             '96a72e1652314215da7140956c3abcf495cafd00811eda3cf4ce03ec5f791f1e'
-            'cc69c88bb68f8af0fe7b01b83331b9282e5e6b8cdddcfe9715da3e05960f411a'
+            'bdfd19ad6d2febc13a24d29f3cfca60f8c72a9eb9cf0ae0b98d1c34b6cb86f92'
+            '9780de95d125def997bd46e3bcbcd452f95adeafbbf7f2b3059ea6af8d2b94f3'
             '94296fd95ae5773399ff2e350a80bf9f1c16c6b6503e8905d322636ae6ca89b0'
             '30ec9319e70af6ec38ed980b84db3f5da73b310f4c9e3c9b1883fda9f1d0d9f2'
             '53111256f1a62ebfb4dc45fad6ef95551202098a467210091152864017487885')
@@ -87,9 +89,7 @@ _package() {
   "
 
   echo "Installing boot image..."
-  # systemd expects to find the kernel here to allow hibernation
-  # https://github.com/systemd/systemd/commit/edda44605f06a41fb86b7ab8128dcf99161d2344
-  install -Dm644 "$(make -s image_name)" "$modulesdir/vmlinuz"
+  zcat "$(make -s image_name)" | install -Dm644 /dev/stdin "$pkgdir/boot/vmlinux-$pkgbase"
 
   # Used by mkinitcpio to name the kernel
   echo "$pkgbase" | install -Dm644 /dev/stdin "$modulesdir/pkgbase"
@@ -103,10 +103,11 @@ _package() {
   # remove build and source links
   rm "$modulesdir"/{source,build}
 
-  sed "$_subst" ../$pkgbase.preset |
+  sed "$_subst" ../linux.preset |
     install -Dm644 /dev/stdin "$pkgdir/etc/mkinitcpio.d/$pkgbase.preset"
-
-  sed "$_subst" ../91-$pkgbase.hook |
+  sed "$_subst" ../90-linux.hook |
+    install -Dm644 /dev/stdin "$pkgdir/usr/share/libalpm/hooks/90-$pkgbase.hook"
+  sed "$_subst" ../91-linux.hook |
     install -Dm644 /dev/stdin "$pkgdir/usr/share/libalpm/hooks/91-$pkgbase.hook"
 }
 

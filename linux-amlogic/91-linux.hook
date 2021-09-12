@@ -2,7 +2,7 @@
 Type = Path
 Operation = Install
 Operation = Upgrade
-Target = usr/lib/modules/*/vmlinuz
+Target = boot/vmlinux-%PKGBASE%
 Target = usr/lib/initcpio/*
 
 [Action]
