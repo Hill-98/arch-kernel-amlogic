@@ -1,3 +1,3 @@
 post_remove() {
-  rm -f boot/initramfs-%PKGBASE%.uimg
+  rm boot/initramfs-linux-amlogic.uimg
 }
