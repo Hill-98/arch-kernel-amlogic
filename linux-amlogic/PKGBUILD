@@ -4,7 +4,7 @@
 # shellcheck disable=SC2034
 
 pkgbase=linux-amlogic
-pkgver=5.10.64
+pkgver=5.10.66
 pkgrel=1
 url="https://www.kernel.org/"
 arch=('aarch64')
@@ -24,7 +24,7 @@ source=(
     linux.preset
     meson-gxl-s905d-phicomm-n1.dts
 )
-sha256sums=('3eb84bd24a2de2b4749314e34597c02401c5d6831b055ed5224adb405c35e30a'
+sha256sums=('5dfa06bbbbd164b9ea669ec637b1e6d05fb5fea8ef3aeb6729f2cbcd0dfcc8a7'
             '35cdf5543d27d133aae0aecd548a20e561b10e0137ae3cf615bd2a2b7a2723e8'
             '831ac3a6ea8568c58e491c6f57e3b3c8074e8b9ec530b65dc755cda69d8e3079'
             'bb935ad2467637966185b88d18a3f9be2f37d3acdc71ed361eae326ca898d6fc'
