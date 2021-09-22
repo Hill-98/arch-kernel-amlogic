@@ -5,7 +5,6 @@ on:
     paths:
       - 'linux-amlogic/**'
 
-
 jobs:
   linux-amlogic:
     env:
