@@ -4,7 +4,7 @@
 # shellcheck disable=SC2034
 
 pkgbase=linux-amlogic
-pkgver=5.15.22
+pkgver=5.15.27
 pkgrel=1
 url="https://www.kernel.org/"
 arch=('aarch64')
@@ -17,24 +17,30 @@ source=(
     0001-revert-arm64-get-rid-of-TEXT_OFFSET.patch
     0002-make-proc-cpuinfo-consistent-on-arm64-and-arm.patch
     0003-ZEN-Add-sysctl-and-CONFIG-to-disallow-unprivileged-C.patch
+    0004_fix_NFSv4_mount_regression.diff
     90-linux.hook
     91-linux.hook
     config
     linux.preset
     meson-gxl-s905d-phicomm-n1.dts
 )
-sha256sums=('3544f960c4105d4d42e9bf6d2a0a1dd44a1928240a0ef45aa8e97c7b466463c3'
+sha256sums=('33c98fecc07c6889fb256525e17bf112698fde4fed024adb82f74bca59dd7a06'
             'bfd418374e62f2ac469a6fb659e0eff013ed39514978fdc12690fbd3c19f3249'
             '831ac3a6ea8568c58e491c6f57e3b3c8074e8b9ec530b65dc755cda69d8e3079'
             '96a72e1652314215da7140956c3abcf495cafd00811eda3cf4ce03ec5f791f1e'
+            'e9527ad81d5b1821a7b17c56cb3abaec85785563f51e448cb3c06f1c68e2966f'
             'bdfd19ad6d2febc13a24d29f3cfca60f8c72a9eb9cf0ae0b98d1c34b6cb86f92'
             '9780de95d125def997bd46e3bcbcd452f95adeafbbf7f2b3059ea6af8d2b94f3'
-            'e57d3b418f2213b4b03cf514fa7e0c562b6397ef4f56ce6fc05e5ea09f94d088'
+            'b42f3eec8087b7cc788621b78159cd04892bbd0abf2d5543860966676ee35525'
             '30ec9319e70af6ec38ed980b84db3f5da73b310f4c9e3c9b1883fda9f1d0d9f2'
             '53111256f1a62ebfb4dc45fad6ef95551202098a467210091152864017487885')
 
 prepare() {
   cd $_srcname
+
+  # fix NFSv4 mounting issue regression - FS#73838 / FS#73860
+  # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/patch/?id=6f2836341d8a39e1e000572b10959347d7e61fd9
+  patch -Rp1 -i ../0004_fix_NFSv4_mount_regression.diff
 
   echo "Apply custom Phicomm N1 dts..."
   cp -f -v ../meson-gxl-s905d-phicomm-n1.dts arch/arm64/boot/dts/amlogic/meson-gxl-s905d-phicomm-n1.dts
