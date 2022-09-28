@@ -4,7 +4,7 @@
 # shellcheck disable=SC2034
 
 pkgbase=linux-amlogic
-pkgver=5.15.68
+pkgver=5.15.71
 pkgrel=1
 url="https://www.kernel.org/"
 arch=('aarch64')
@@ -17,30 +17,31 @@ source=(
     0001-revert-arm64-get-rid-of-TEXT_OFFSET.patch
     0002-make-proc-cpuinfo-consistent-on-arm64-and-arm.patch
     0003-ZEN-Add-sysctl-and-CONFIG-to-disallow-unprivileged-C.patch
-    0004_fix_NFSv4_mount_regression.diff
+    0004-Fix-NFSv4-mount-regression.patch
     90-linux.hook
     91-linux.hook
     config
     linux.preset
     meson-gxl-s905d-phicomm-n1.dts
 )
-sha256sums=('17bbb3cb5c9ba18583b6679cc28f828aec49c72abbfc6fbde310b0cb17218b7e'
+sha256sums=('5f5408138e016c0e029e015d98ceab86f4e6366c65cd611259dac808ab1d1e53'
             'bfd418374e62f2ac469a6fb659e0eff013ed39514978fdc12690fbd3c19f3249'
             '831ac3a6ea8568c58e491c6f57e3b3c8074e8b9ec530b65dc755cda69d8e3079'
             '96a72e1652314215da7140956c3abcf495cafd00811eda3cf4ce03ec5f791f1e'
-            'e9527ad81d5b1821a7b17c56cb3abaec85785563f51e448cb3c06f1c68e2966f'
+            '95dad02b01937681af0a207e22a6bf64c33e067bf7a14cb98262dd8f69194eb8'
             'bdfd19ad6d2febc13a24d29f3cfca60f8c72a9eb9cf0ae0b98d1c34b6cb86f92'
             '9780de95d125def997bd46e3bcbcd452f95adeafbbf7f2b3059ea6af8d2b94f3'
-            '17130540f6a71ef00af6448f926a72e61ec48169ae2280eb163c4a165f6eb0ee'
+            '59c61086469e358375aa0322ea3f2008c647bcf611e2e8c5a31fc68c51d5ba84'
             '30ec9319e70af6ec38ed980b84db3f5da73b310f4c9e3c9b1883fda9f1d0d9f2'
             '53111256f1a62ebfb4dc45fad6ef95551202098a467210091152864017487885')
 
 prepare() {
   cd $_srcname
 
-  # fix NFSv4 mounting issue regression - FS#73838 / FS#73860
-  # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/patch/?id=6f2836341d8a39e1e000572b10959347d7e61fd9
-  patch -Rp1 -i ../0004_fix_NFSv4_mount_regression.diff
+  echo "Setting version..."
+  scripts/setlocalversion --save-scmversion
+  echo "-$pkgrel" > localversion.10-pkgrel
+  echo "${pkgbase#linux}" > localversion.20-pkgname
 
   echo "Apply custom Phicomm N1 dts..."
   cp -f -v ../meson-gxl-s905d-phicomm-n1.dts arch/arm64/boot/dts/amlogic/meson-gxl-s905d-phicomm-n1.dts
@@ -54,14 +55,10 @@ prepare() {
     patch -Np1 < "../$src"
   done
 
-  echo "Setting version..."
-  scripts/setlocalversion --save-scmversion
-  echo "-$pkgrel" > localversion.10-pkgrel
-  echo "${pkgbase#linux}" > localversion.20-pkgname
-
   echo "Setting config..."
   cp ../config .config
   make olddefconfig
+  diff -u ../config .config || :
 
   make -s kernelrelease > version
   echo "Prepared $pkgbase version $(<version)"
@@ -75,15 +72,27 @@ build() {
 _package() {
   pkgdesc="The AMLOGIC Linux Kernel and modules"
   depends=(coreutils kmod mkinitcpio uboot-tools)
-  optdepends=('crda: to set the correct wireless channels of your country'
+  optdepends=('wireless-regdb: to set the correct wireless channels of your country'
               'linux-firmware: firmware images needed for some devices')
-  provides=(WIREGUARD-MODULE)
+  provides=(WIREGUARD-MODULE KSMBD-MODULE)
   install=${pkgname}.install
 
   cd $_srcname
-  local kernver modulesdir
-  kernver="$(<version)"
-  modulesdir="$pkgdir/usr/lib/modules/$kernver"
+  local kernver="$(<version)"
+  local modulesdir="$pkgdir/usr/lib/modules/$kernver"
+
+  echo "Installing boot image..."
+  install -Dm644 "$(make -s image_name)" "$pkgdir/boot/vmlinux-$pkgbase"
+
+  # Used by mkinitcpio to name the kernel
+  echo "$pkgbase" | install -Dm644 /dev/stdin "$modulesdir/pkgbase"
+
+  echo "Installing modules..."
+  make INSTALL_MOD_PATH="$pkgdir/usr" INSTALL_MOD_STRIP=1 \
+    DEPMOD=/doesnt/exist modules_install  # Suppress depmod
+
+  echo "Installing dtbs..."
+  install -Dt "$pkgdir/boot/$pkgbase-dtbs" -m644 arch/arm64/boot/dts/amlogic/*.dtb
 
   # sed expression
   local _subst="
@@ -91,35 +100,22 @@ _package() {
     s|%KERNVER%|${kernver}|g
   "
 
-  echo "Installing boot image..."
-  zcat "$(make -s image_name)" | install -Dm644 /dev/stdin "$pkgdir/boot/vmlinux-$pkgbase"
-
-  # Used by mkinitcpio to name the kernel
-  echo "$pkgbase" | install -Dm644 /dev/stdin "$modulesdir/pkgbase"
-
-  echo "Installing modules..."
-  make INSTALL_MOD_PATH="$pkgdir/usr" INSTALL_MOD_STRIP=1 modules_install
-
-  echo "Installing dtbs..."
-  install -Dt "$pkgdir/boot/$pkgbase-dtbs" -m644 arch/arm64/boot/dts/amlogic/*.dtb
-
-  # remove build and source links
-  rm "$modulesdir"/{source,build}
-
   sed "$_subst" ../linux.preset |
     install -Dm644 /dev/stdin "$pkgdir/etc/mkinitcpio.d/$pkgbase.preset"
   sed "$_subst" ../90-linux.hook |
     install -Dm644 /dev/stdin "$pkgdir/usr/share/libalpm/hooks/90-$pkgbase.hook"
   sed "$_subst" ../91-linux.hook |
     install -Dm644 /dev/stdin "$pkgdir/usr/share/libalpm/hooks/91-$pkgbase.hook"
+
+  # remove build and source links
+  rm "$modulesdir"/{source,build}
 }
 
 _package-headers() {
   pkgdesc="Headers and scripts for building modules for the AMLOGIC Linux kernel"
 
   cd $_srcname
-  local builddir
-  builddir="$pkgdir/usr/lib/modules/$(<version)/build"
+  local builddir="$pkgdir/usr/lib/modules/$(<version)/build"
 
   echo "Installing build files..."
   install -Dt "$builddir" -m644 .config Makefile Module.symvers System.map \
@@ -139,10 +135,10 @@ _package-headers() {
   install -Dt "$builddir/drivers/md" -m644 drivers/md/*.h
   install -Dt "$builddir/net/mac80211" -m644 net/mac80211/*.h
 
-  # http://bugs.archlinux.org/task/13146
+  # https://bugs.archlinux.org/task/13146
   install -Dt "$builddir/drivers/media/i2c" -m644 drivers/media/i2c/msp3400-driver.h
 
-  # http://bugs.archlinux.org/task/20402
+  # https://bugs.archlinux.org/task/20402
   install -Dt "$builddir/drivers/media/usb/dvb-usb" -m644 drivers/media/usb/dvb-usb/*.h
   install -Dt "$builddir/drivers/media/dvb-frontends" -m644 drivers/media/dvb-frontends/*.h
   install -Dt "$builddir/drivers/media/tuners" -m644 drivers/media/tuners/*.h
@@ -168,23 +164,22 @@ _package-headers() {
   find "$builddir" -type f -name '*.o' -printf 'Removing %P\n' -delete
 
   echo "Stripping build tools..."
-  local file strip_bin
-  strip_bin=$(command -v aarch64-linux-gnu-strip || command -v strip)
+  local file
   while read -rd '' file; do
     case "$(file -bi "$file")" in
       application/x-sharedlib\;*)      # Libraries (.so)
-        $strip_bin -v $STRIP_SHARED "$file" ;;
+        aarch64-linux-gnu-strip -v $STRIP_SHARED "$file" ;;
       application/x-archive\;*)        # Libraries (.a)
-        $strip_bin -v $STRIP_STATIC "$file" ;;
+        aarch64-linux-gnu-strip -v $STRIP_STATIC "$file" ;;
       application/x-executable\;*)     # Binaries
-        $strip_bin -v $STRIP_BINARIES "$file" ;;
+        aarch64-linux-gnu-strip -v $STRIP_BINARIES "$file" ;;
       application/x-pie-executable\;*) # Relocatable binaries
-        $strip_bin -v $STRIP_SHARED "$file" ;;
+        aarch64-linux-gnu-strip -v $STRIP_SHARED "$file" ;;
     esac
   done < <(find "$builddir" -type f -perm -u+x ! -name vmlinux -print0)
 
   echo "Stripping vmlinux..."
-  $strip_bin -v $STRIP_STATIC "$builddir/vmlinux"
+  aarch64-linux-gnu-strip -v $STRIP_STATIC "$builddir/vmlinux"
 
   echo "Adding symlink..."
   mkdir -p "$pkgdir/usr/src"

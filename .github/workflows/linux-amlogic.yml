@@ -13,7 +13,7 @@ jobs:
     container:
       image: archlinux:base-devel
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Update packages
       run: yes | pacman -Syu --noconfirm
     - name: Install need packages
@@ -34,7 +34,7 @@ jobs:
     - name: List Files
       run: ls -l ${{ env.BUILD_DIR }}
     - name: Upload
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: ${{ github.job }}
         path: ${{ env.BUILD_DIR }}/*.pkg.tar.*
