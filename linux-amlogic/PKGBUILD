@@ -5,7 +5,7 @@
 
 pkgbase=linux-amlogic
 pkgver=5.15.140
-pkgrel=1
+pkgrel=2
 url="https://www.kernel.org/"
 arch=('aarch64')
 license=('GPL2')
@@ -30,7 +30,7 @@ sha256sums=('be2bee8b346f3ccb35879f16c80a323edda571e36190403805c14a9ea24e4a47'
             'bdfd19ad6d2febc13a24d29f3cfca60f8c72a9eb9cf0ae0b98d1c34b6cb86f92'
             '9780de95d125def997bd46e3bcbcd452f95adeafbbf7f2b3059ea6af8d2b94f3'
             '98c88fb9f9846246a6b30874f4186538578bf1f8b99cda8d78378c0132d16bdc'
-            '30ec9319e70af6ec38ed980b84db3f5da73b310f4c9e3c9b1883fda9f1d0d9f2'
+            '5b702caec13544f7ed9edc5f91dc4e56630ad344ac14665eaa472c0a9ac0a679'
             '53111256f1a62ebfb4dc45fad6ef95551202098a467210091152864017487885')
 
 prepare() {
